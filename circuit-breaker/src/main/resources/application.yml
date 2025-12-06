@@ -1,0 +1,32 @@
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics
+
+logging.level.io.github.resilience4j.circuitbreaker: DEBUG
+logging.level.io.github.resilience4j.core: DEBUG
+
+logging.level.root: DEBUG
+
+logging.level.org.apache.coyote: INFO
+logging.level.org.apache.tomcat: INFO
+
+
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      myServiceCB:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 50
+        minimumNumberOfCalls: 50
+        failureRateThreshold: 5
+        waitDurationInOpenState: 2s
+        permittedNumberOfCallsInHalfOpenState: 10
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        recordExceptions:
+          - java.io.IOException
+          - java.io.EOFException
+          - java.util.concurrent.TimeoutException

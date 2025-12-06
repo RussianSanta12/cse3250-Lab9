@@ -1,0 +1,4 @@
+{
+  "name": "Java 21",
+  "image": "mcr.microsoft.com/devcontainers/java:1-21-bullseye"
+}
