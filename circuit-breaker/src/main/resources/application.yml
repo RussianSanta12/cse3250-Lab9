@@ -3,7 +3,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,metrics
+        include: health,metrics,circuitbreakers
 
 logging.level.io.github.resilience4j.circuitbreaker: DEBUG
 logging.level.io.github.resilience4j.core: DEBUG
@@ -22,7 +22,7 @@ resilience4j:
         slidingWindowType: COUNT_BASED
         slidingWindowSize: 50
         minimumNumberOfCalls: 50
-        failureRateThreshold: 5
+        failureRateThreshold: 10
         waitDurationInOpenState: 2s
         permittedNumberOfCallsInHalfOpenState: 10
         automaticTransitionFromOpenToHalfOpenEnabled: true
@@ -30,3 +30,4 @@ resilience4j:
           - java.io.IOException
           - java.io.EOFException
           - java.util.concurrent.TimeoutException
+          - java.lang.RuntimeException

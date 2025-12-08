@@ -6,31 +6,17 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
+
 
 @Service
 public class ExternalApiService {
 
-    private final AtomicInteger callCount = new AtomicInteger(0);
-    private final AtomicLong windowStart = new AtomicLong(System.currentTimeMillis());
+
 
     @CircuitBreaker(name = "myServiceCB", fallbackMethod = "fallback")
     public String callApi() {
 
-        long now = System.currentTimeMillis();
-        long start = windowStart.get();
-        if (now - start > 2000) {
-            windowStart.set(now);
-            callCount.set(0);
-        }
-
-        int count = callCount.incrementAndGet();
-        if (count > 50) {
-            throw new RuntimeException("Rate limit exceeded");
-        }
-        
-
+        // Simulate random failure to trigger circuit breaker
         System.out.println("Calling API 02");
         try {
             Thread.sleep(1);
@@ -41,12 +27,9 @@ public class ExternalApiService {
         Logger log = LoggerFactory.getLogger(getClass());
         log.debug("TEST DEBUG LOG");
 
-
-        /*
-        if (Math.random() > 0.5) {
+        if (Math.random() < 0.1) {
             throw new RuntimeException("API failed");
         }
-        */
         return "Success!";
     }
 
